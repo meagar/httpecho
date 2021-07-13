@@ -4,57 +4,57 @@
 	<title>ECHO!</title>
 	<style type="text/css">
 		{{.Style}}
+
+		table { font-family: monospace }
 	</style>
 </head>
 <body>
 	<div class="container">
-		<h1>Echo!</h1>
+		<h1>httpecho</h1>
 
-		<p>This service echos details about each request back to the client.</p>
+		<p>This service echos details about a request back to the client.</p>
 
 		<h3>Request Details</h3>
 
 		<table class="table">
-		<tr>
-			<th>Method</th>
-			<td>{{.Method}}</td>
-		</tr>
-		<tr>
-			<th>URL</th>
-			<td>{{.URL}}</td>
-		</tr>
-		<tr>
-			<th>Header</th>
-			<td>
-				<table>
-					{{range $key, $values := .Header}}
-						<tr>
-							<th>{{$key}}</th>
-							<td>
-							<ul>
-							{{range $value := $values}}
-								<li>{{$value}}</li>
+			<tr>
+				<th>Method</th>
+				<td>{{.Method}}</td>
+			</tr>
+			<tr>
+				<th>URL</th>
+				<td>{{.URL}}</td>
+			</tr>
+			<tr>
+				<th>Headers</th>
+				<td>
+					<table>
+						{{range $key, $values := .Header}}
+							{{ range $_, $value := $values }}
+								<tr>
+									<th>{{$key}}</th>
+									<td>{{$value}}</td>
+								</tr>
 							{{end}}
-							</ul>
-							</td>
-						</tr>
-					{{end}}
-				</table>
-			</td>
-		</tr>
-		<tr>
-			<th>ENV</th>
-			<td>
-				<table>
-					{{range $key, $value := .Env}}
-						<tr>
-							<th>{{$key}}</th>
-							<td>{{$value}}</th>
-						</tr>
-					{{end}}
-				</table>
-			</td>
-		</tr>
+						{{end}}
+					</table>
+				</td>
+			</tr>
+			{{ if .ShowEnv }}
+			<tr>
+				<th>ENV</th>
+				<td>
+					<table>
+						{{range $key, $value := .Env}}
+							<tr>
+								<th>{{$key}}</th>
+								<td>{{$value}}</th>
+							</tr>
+						{{end}}
+					</table>
+				</td>
+			</tr>
+			{{ end }}
 		</table>
 	</div>
 </body>

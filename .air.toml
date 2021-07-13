@@ -1,5 +1,5 @@
 [build]
 # Just plain old shell command. You could use `make` as well.
-cmd = "go build -o ./tmp/main ."
+cmd = "go build -tags dev -o ./tmp/main ."
 full_bin = "./tmp/main 3003"
-include_ext = ["go", "gohtml"]
+include_ext = ["go"]

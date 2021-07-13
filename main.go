@@ -12,16 +12,15 @@ import (
 	"strings"
 )
 
-//go:embed index.gohtml
-var echoTemplateStr string
-var echoTemplate = template.Must(template.New("").Parse(echoTemplateStr))
-
 //go:embed bootstrap.min.css
 var bootstrap string
+
+const version = "0.0.1"
 
 func main() {
 	port := parsePort()
 
+	log.Printf("httpecho v%s", version)
 	log.Printf("Listening on http://localhost:%d", port)
 
 	http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
@@ -37,11 +36,12 @@ func main() {
 		}
 
 		data := struct {
-			Style  template.CSS
-			Method string
-			URL    *url.URL
-			Header http.Header
-			Env    map[string]string
+			Style   template.CSS
+			Method  string
+			URL     *url.URL
+			Header  http.Header
+			ShowEnv bool // TODO: Enable this via CLI?
+			Env     map[string]string
 		}{
 			Style:  template.CSS(bootstrap),
 			Method: req.Method,
@@ -49,7 +49,7 @@ func main() {
 			Header: req.Header,
 			Env:    env,
 		}
-		echoTemplate.Execute(res, data)
+		render(res, data)
 	})
 
 	log.Panic(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
